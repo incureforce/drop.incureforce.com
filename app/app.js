@@ -10,7 +10,7 @@ let client = postgres({
 })
 
 let main = async function () {
-    await client`drop table tab_file;`
+    // await client`drop table tab_file;`
     await client`create table if not exists tab_file ( key bytea not null, content bytea not null, expire_date timestamp not null, expire_count int not null, primary key (key) );`
 
     let handlers = [new RequestPutClass(client), new RequestGetClass(client)]
