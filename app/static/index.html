@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="./index.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet"> 
+
+<title>drop.incureforce.com</title>
+
+<template id="shell-line">
+    <div class="shell-line">
+        <span class="shell-prompt">/app $</span>
+        <span class="shell-callin">curl</span>
+        <span class="shell-callin">--upload-file</span>
+        <span class="shell-callin shell-file-name"></span>
+        <span class="shell-callin shell-file-push"></span>
+    </div>
+    <div class="shell-line">
+        <span>&rsaquo;</span>
+        <span class="shell-file-link">
+            <a target="_blank" class="shell-browse-button"></a>
+        </span>
+    </div>
+</template>
+
+<div class="container">
+    <div class="shell">
+        <div class="shell-header"><span>&#x21CA; drop</span></div>
+        <div class="shell-blocks">
+            <div class="shell-blocks-item active"><span>/bin/ash</span></div><div class="shell-blocks-item"><span>/usr/bin/ssh</span></div>
+        </div>
+        <div class="shell-output">
+            <div class="shell-line">
+                <span class="shell-prompt">/app $</span>
+                <span class="shell-callin">man drop</span>
+            </div>
+            <div class="shell-line">
+                <span>&rsaquo;</span>
+                <span>Secure encrypted temporal file storage</span>
+            </div>
+            <div class="shell-line">
+                <span>&rsaquo;</span>
+                <span>curl</span>
+                <span>--upload-file</span>
+                <span>$filename</span>
+                <span class="shell-file-link">
+                    <a target="_blank" data-init="url">https://alpine/storage/$filename</a>
+                </span>
+            </div>
+            <div class="shell-line">
+                <input type='file' accept='*/*' onchange='fileRead(event)'>
+                <span class="shell-prompt">/app $</span>
+                <span class="shell-callin">
+                    <a class="shell-browse-button" onclick="fileBrowse(event)">web open-file</a>
+                </span>
+                <span class="shell-cursor">&nbsp;</span>
+            </div>
+        </div>
+        <div class="shell-footer">
+            <span>Copyright &copy; 2020 Stefan <b>ATZLESBERGER</b></span>
+        </div>
+    </div>
+</div>
+
+<script src="./index.js"></script>

@@ -1,5 +1,7 @@
 const os = require('os')
+const fs = require('fs')
 const url = require('url')
+const path = require('path')
 const crypto = require('crypto')
 const postgres = require('postgres')
 
@@ -12,7 +14,15 @@ let client = postgres({
 let URIHandlerClass = function () {
 }
 
+URIHandlerClass.static = '/app/static'
 URIHandlerClass.hostname = os.hostname()
+URIHandlerClass.extensions = {
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.js': 'text/javascript',
+
+    '.ico': 'image/x-icon'
+}
 
 URIHandlerClass.startup = async function () {
     // await client`drop table tab_file;`
@@ -20,7 +30,7 @@ URIHandlerClass.startup = async function () {
 
     await URIHandlerClass.enqueueCleanup()
 
-    return [ URIHandlerClass.processStatic, URIHandlerClass.processStorage, URIHandlerClass.processError ]
+    return [ URIHandlerClass.processStorage, URIHandlerClass.processStatic, URIHandlerClass.processError ]
 }
 
 URIHandlerClass.performCleanup = async function () {
@@ -118,8 +128,8 @@ let staticTest = function (req) {
     let uriPath = uri.pathname
 
     if (req.method == 'GET') {
-        let match = uriPath.match(/static\/(.+)/)
-        if (match) {
+        let match = uriPath.match(/\/(.+)?/)
+        if (match && match.index == 0) {
             req.match = match
 
             return true
@@ -136,7 +146,30 @@ URIHandlerClass.processStatic = function (req, res) {
         return false
     }
 
-    return URIHandlerClass.processError(req, res)
+    let fileName = req.match[1] || 'index.html'
+    let filePath = path.normalize(path.join(URIHandlerClass.static, fileName))
+    let fileContentType = URIHandlerClass.extensions[path.extname(fileName)] || 'application/octet-stream'
+
+    if (filePath.startsWith(URIHandlerClass.static)) {
+        fs.readFile(filePath, function (err, data) {
+            if (err) {
+                return URIHandlerClass.processError(req, res)
+            } else {
+                res.writeHead(200, {
+                    'Content-Type': fileContentType
+                })
+            
+                res.end(data)
+            
+                return true
+            }
+        })
+    
+        return true
+    }
+    else {
+        return URIHandlerClass.processError(req, res)
+    }
 }
 
 let storageTest = function (req) {
@@ -144,8 +177,8 @@ let storageTest = function (req) {
     let uriPath = uri.pathname
 
     if (req.method == 'GET' || req.method == 'PUT') {
-        let match = uriPath.match(/storage\/(.+)/)
-        if (match) {
+        let match = uriPath.match(/\/storage\/(.+)/)
+        if (match && match.index == 0) {
             req.match = match
 
             return true

@@ -1,0 +1,140 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(black 15%, transparent 16%) 0 0,
+        radial-gradient(black 15%, transparent 16%) 8px 8px,
+        radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+        radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+    background-color:#282828;
+    background-size:16px 16px;
+}
+
+span {
+    vertical-align: middle;
+}
+
+.container {
+    width: 60em;
+}
+
+.shell {
+    color: white;
+
+    font-size: 1em;
+
+    border: 0.2em solid #5c6370;
+    border-radius: 1em;
+
+    background-color: #282c34;
+}
+
+.shell .shell-prompt {
+    color: #c678dd;
+}
+
+.shell .shell-cursor {
+    animation: cursor-animation 1s infinite alternate;
+}
+
+.shell .shell-callin {
+    color: #61aeee;
+}
+
+.shell .shell-failed {
+    color: #be5046;
+}
+
+@keyframes cursor-animation {
+    0%		{ background-color: #61aeeeff;}
+    100%	{ background-color: #00000000;}
+}
+
+.shell .shell-header {
+    padding: 4px 8px;
+
+    font-size: 1.8em;
+}
+
+.shell .shell-blocks {
+    background-color: rgba(0, 0, 0, .3);
+
+    font-size: 1em;
+    font-family: 'Source Code Pro', monospace;
+}
+
+.shell .shell-blocks-item {
+    display: inline-block;
+
+    padding: .2em .4em;
+    min-width: 8em;
+    min-height: 1.5em;
+
+    text-align: center;
+
+    background-color: #5c6370;
+
+    border-bottom: 4px solid #ffffff11;
+}
+
+.shell .shell-blocks-item.active {
+    background-color: #818896;
+    
+    border-bottom: 4px solid #61aeee;
+}
+
+.shell .shell-footer {
+    padding: 4px 8px;
+
+    font-size: 1em;
+}
+
+.shell .shell-output {
+    height: 21em;
+
+    color: #abb2bf;
+
+    overflow-y: scroll;
+
+    font-family: 'Source Code Pro', monospace;
+    
+    background-color: #282c34;
+
+    scroll-snap-type: y mandatory;
+}
+
+.shell .shell-line:nth-child(2n+0) {
+    background-color: #ffffff00;
+}
+
+.shell .shell-line:nth-child(2n+1) {
+    background-color: rgba(1, 1, 1, .1);
+}
+
+.shell .shell-line {
+    padding: 4px 8px;
+}
+
+.shell input[type=file] {
+    display: none;
+}
+
+.shell a {
+    color: #abb2bf;
+    text-decoration: underline #abb2bf;
+}
+
+.shell a:hover {
+    text-decoration: underline #61aeee;
+}
+
+.shell .shell-browse-button {
+    cursor: pointer;
+    display: inline;
+}
