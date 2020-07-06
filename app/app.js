@@ -1,31 +1,28 @@
+const url = require('url')
 const http = require('http')
+const crypto = require('crypto')
 
 const postgres = require('postgres')
 
-const RequestPutClass = require('./classes/RequestPutClass')
-const RequestGetClass = require('./classes/RequestGetClass')
-
-let client = postgres({
-    username: 'postgres'
-})
+const URIHandlerClass = require('./classes/URIHandlerClass')
 
 let main = async function () {
-    // await client`drop table tab_file;`
-    await client`create table if not exists tab_file ( key bytea not null, content bytea not null, expire_date timestamp not null, expire_count int not null, primary key (key) );`
-
-    let handlers = [new RequestPutClass(client), new RequestGetClass(client)]
+    let handlers = await URIHandlerClass.startup()
 
     let server = http.createServer(async function (req, res) {
+        URIHandlerClass.applyURI(req)
+
         for (let handler of handlers) {
-            if (handler.test(req, res)) {
-                return handler.handle(req, res)
+            if (handler(req, res)) {
+                return
             }
         }
-
-        res.writeHead(404, 'text/plain')
-        res.end('FILE NOT FOUND')
     })
 
+    server.addListener('close', function() {
+        URIHandlerClass.dispose()
+    })
+    
     server.listen(80)
 }
 
