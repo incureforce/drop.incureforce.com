@@ -14,6 +14,7 @@ let client = postgres({
 let URIHandlerClass = function () {
 }
 
+URIHandlerClass.limit = 1024 * 1024 * 5
 URIHandlerClass.static = '/app/static'
 URIHandlerClass.hostname = os.hostname()
 URIHandlerClass.extensions = {
@@ -219,23 +220,38 @@ let storageDecrypt = async function (req, res, params) {
     catch (err) {
         console.error(err)
 
-        return URIHandlerClass.processError(req, res, {
+        let result = {
             status: 500, 
             message: 'INTERNAL SERVER ERROR'
-        })
+        }
+
+        if ('status' in err && 'message' in err) {
+            Object.assign(result, err)
+        }
+
+        return URIHandlerClass.processError(req, res, result)
     }
 }
 
 let storageEncrypt = async function (req, res, params) {
     try {
         let dbKey = params.token
-        let decryptedContent = await new Promise(function (resolve) {
+        let decryptedContent = await new Promise(function (resolve, reject) {
             let chunks = []
+            let chunksLength = 0
             
             req.on('readable', function () {
                 let chunk = req.read()
                 if (chunk != null) {
                     chunks.push(chunk)
+
+                    chunksLength += chunk.length
+                }
+                if (chunksLength > URIHandlerClass.limit) {
+                    reject({
+                        'status': 403,
+                        'message': 'Forbidden (Limit exceeded)'
+                    })
                 }
             });
             
@@ -271,10 +287,16 @@ let storageEncrypt = async function (req, res, params) {
     catch (err) {
         console.error(err)
 
-        return URIHandlerClass.processError(req, res, {
+        let result = {
             status: 500, 
             message: 'INTERNAL SERVER ERROR'
-        })
+        }
+
+        if ('status' in err && 'message' in err) {
+            Object.assign(result, err)
+        }
+
+        return URIHandlerClass.processError(req, res, result)
     }
 }
 

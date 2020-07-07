@@ -16,8 +16,9 @@
         <span class="shell-callin shell-file-name"></span>
         <span class="shell-callin shell-file-push"></span>
     </div>
-    <div class="shell-line">
-        <span>&rsaquo;</span>
+    <div class="shell-line shell-active">
+        <span class="shell-cmd-icon"></span>
+        <span class="shell-file-info">Waiting ...</span>
         <span class="shell-file-link">
             <a target="_blank" class="shell-browse-button"></a>
         </span>
@@ -26,7 +27,7 @@
 
 <div class="container">
     <div class="shell">
-        <div class="shell-header"><span>&#x21CA; drop</span></div>
+        <div class="shell-header"><img src="favicon.ico"> <span>drop</span></div>
         <div class="shell-blocks">
             <div class="shell-blocks-item active"><span>/bin/ash</span></div><div class="shell-blocks-item"><span>/usr/bin/ssh</span></div>
         </div>
@@ -36,11 +37,14 @@
                 <span class="shell-callin">man drop</span>
             </div>
             <div class="shell-line">
-                <span>&rsaquo;</span>
+                <span class="shell-cmd-icon"></span>
                 <span>Secure encrypted temporal file storage</span>
+                <span>
+                    (<a target="_blank" href="https://github.com/incureforce/drop.incureforce.com">github</a>)
+                </span>
             </div>
             <div class="shell-line">
-                <span>&rsaquo;</span>
+                <span class="shell-cmd-icon"></span>
                 <span>curl</span>
                 <span>--upload-file</span>
                 <span>$filename</span>

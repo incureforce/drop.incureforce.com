@@ -35,6 +35,25 @@ span {
     background-color: #282c34;
 }
 
+.shell-line .shell-cmd-icon::after {
+    display: inline-block;
+    content: "\203A";
+
+    transform-origin: center 55%;
+    transform: translate(10%, -5%)
+}
+
+.shell-line.shell-active .shell-cmd-icon::after {
+    content: "\26F6";
+
+    animation: spin-animation 2s linear infinite;
+}
+
+@keyframes spin-animation {
+    0%		{ transform: rotate(0deg); }
+    100%	{ transform: rotate(360deg); }
+}
+
 .shell .shell-prompt {
     color: #c678dd;
 }
@@ -43,23 +62,38 @@ span {
     animation: cursor-animation 1s infinite alternate;
 }
 
-.shell .shell-callin {
-    color: #61aeee;
-}
-
-.shell .shell-failed {
-    color: #be5046;
-}
-
 @keyframes cursor-animation {
-    0%		{ background-color: #61aeeeff;}
-    100%	{ background-color: #00000000;}
+    0%		{ background-color: #61aeeeff; }
+    100%	{ background-color: #00000000; }
+}
+
+.shell-active .shell-file-link,
+.shell-failed .shell-file-link {
+    display: none;
+}
+
+.shell-upload .shell-file-link {
+    display: inline-block;
+}
+
+.shell-upload .shell-file-info {
+    color: #98c379;
+}
+
+.shell-failed .shell-file-info {
+    color: #be5046;
 }
 
 .shell .shell-header {
     padding: 4px 8px;
 
     font-size: 1.8em;
+}
+
+.shell .shell-header img {
+    width: 0.8em;
+    height: 0.8em;
+    vertical-align: middle;
 }
 
 .shell .shell-blocks {
@@ -127,6 +161,7 @@ span {
 
 .shell a {
     color: #abb2bf;
+    cursor: pointer;
     text-decoration: underline #abb2bf;
 }
 
@@ -135,6 +170,5 @@ span {
 }
 
 .shell .shell-browse-button {
-    cursor: pointer;
     display: inline;
 }

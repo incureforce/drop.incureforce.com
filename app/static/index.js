@@ -1,3 +1,7 @@
+let sleep = function(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 let fileBrowse = function (evt) {
     let target = evt.target
 
@@ -9,7 +13,7 @@ let fileBrowse = function (evt) {
     input.click()
 }
 
-let fileRead = function (event) {
+let fileRead = async function (event) {
     let input = event.target;
 
     let location = window.location
@@ -21,6 +25,8 @@ let fileRead = function (event) {
         let element = document.importNode(template.content, true)
         let elements = container.childNodes
 
+        let shellLine = element.querySelector('.shell-line:nth-child(2)')
+        let shellFileInfo = element.querySelector('.shell-file-info')
         let shellFileName = element.querySelector('.shell-file-name')
         let shellFilePush = element.querySelector('.shell-file-push')
         let shellFileLink = element.querySelector('.shell-file-link a')
@@ -35,11 +41,21 @@ let fileRead = function (event) {
 
         container.scrollTo(0, container.scrollHeight)
 
+        await sleep(1000)
+
         let request = new XMLHttpRequest()
 
         request.addEventListener('load', function (event) {
+            let classList = shellLine.classList
+
+            classList.toggle('shell-active')
+
             if (request.status >= 200 && request.status < 300) {
                 console.log(request.statusText, request.responseText)
+
+                shellFileInfo.innerText = 'okay (' + request.status + ')'
+
+                classList.toggle('shell-upload')
 
                 let fileCode = request.responseText
 
@@ -48,15 +64,9 @@ let fileRead = function (event) {
             } else {
                 console.warn(request.statusText, request.responseText)
 
-                let parent = shellFileLink.parentElement
-                let parentClassList = parent.classList
+                shellFileInfo.innerText = 'failed (' + request.status + ')'
 
-                shellFileLink.remove()
-
-                parent.innerText = 'failed (' + request.status + ')'
-
-                parentClassList.add('shell-failed')
-
+                classList.toggle('shell-failed')
             }
         })
 
